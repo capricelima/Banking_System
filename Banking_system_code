@@ -1,0 +1,67 @@
+menu = """
+Bom dia!
+Qual operação deseja fazer?
+
+[d] Depositar
+[s] Sacar
+[e] Extrato
+[q] Sair
+
+=> """
+
+saldo = 0
+limite = 500
+extrato = ""
+numero_saques = 0
+LIMITE_SAQUES = 3
+valor_saque = 0
+saque = 0
+valor_deposito = 0
+deposito_list = []
+saque_list = []
+
+
+while True:
+    opcao = input(menu)
+
+    if opcao == 'd':
+        print('Depósito')
+        valor_deposito = float(input('Qual valor deseja depositar? Obs: Não serão aceitos moedas, apenas notas.'))
+        if valor_deposito > 0:
+            print(f'Valor depositado: R$ {valor_deposito}')
+            saldo = saldo + valor_deposito
+            deposito_list.append(valor_deposito)
+        else:
+            print('Operação falhou. Informe um valor válido!')
+
+    elif opcao == 's':
+        print('Saque')
+        if (numero_saques >= 3):
+            print('Limite diário de saque atingido!')
+        else:
+            valor_saque = float(input('Qual valor deseja sacar?'))
+            if (valor_saque > saldo):
+                print('Saldo insuficiente!')
+                continue
+            elif (valor_saque > limite):
+                print('Você só pode sacar até R$ 500.00. Escolha um valor menor ou igual a R$ 500.00')
+                continue
+            else:
+                if valor_saque > 0:
+                    saldo = saldo - valor_saque
+                    print('O valor sacado será: R${:.2f}'.format(valor_saque))
+                    numero_saques = numero_saques + 1    
+                    saque = valor_saque         
+                    saque_list.append(valor_saque)
+                else:
+                    print('Operação falhou. Informe um valor válido!')
+        
+    elif opcao == 'e':
+        # print('Extrato')
+        print('Segue seu extrato:\n Valores depositados em Real: {}.\nValores Sacados em Real: {}.\nSaldo: R$ {:.2f}'.format(", ".join(("R$ "+str(valor)) for valor in deposito_list),", ".join(("R$ "+str(valor)) for valor in saque_list) , saldo))
+    
+    elif opcao == 'q':
+        break
+
+    else:
+        print('Operação inválida, por favor selecionar novamente a operação desejada')

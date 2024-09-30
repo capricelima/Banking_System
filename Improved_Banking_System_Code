@@ -1,0 +1,155 @@
+from datetime import datetime
+import time
+
+hora_ptbr = '%d/%m/%Y %H:%M:%S'
+data_hora_atual = datetime.now()
+data_deposito = 0
+data_saque = 0
+
+saldo = 0
+limite = 500
+extrato = ""
+numero_saques = 0
+LIMITE_SAQUES = 3
+valor_saque = 0
+saque = 0
+valor_deposito = 0
+operacoes = []
+operacoes_saque = []
+operacoes_dia = 0
+clientes = []
+contas = 0
+lista_conta = []
+
+menu = """
+Bom dia!
+Qual operação deseja fazer?
+
+[1] Depositar
+[2] Sacar
+[3] Extrato
+[4] Criar Usuário
+[5] Criar Conta
+[6] Listar Clientes Cadastrados
+[7] Listar Contas Criadas
+[0] Sair
+
+=> """
+
+
+def deposito():
+    global operacoes_dia, data_hora_atual, saldo, data_deposito
+    
+    if (operacoes_dia >= 3 and data_deposito or data_saque == data_hora_atual):
+            print('Atingiu o limite diário de transações.')
+    else:
+            print('Depósito')
+            valor_deposito = float(input('Qual valor deseja depositar? Obs: Não serão aceitos moedas, apenas notas.'))
+            if valor_deposito > 0:
+                data_hora_atual = datetime.now()
+                
+                data_deposito = data_hora_atual.strftime(hora_ptbr)
+                print(f'Valor depositado: R$ {valor_deposito} às {data_deposito}')
+                saldo = saldo + valor_deposito
+                dic = {'R$': valor_deposito, 'Horário': data_deposito}
+                operacoes.append(dic)
+                operacoes_dia +=1
+            else:
+                print('Operação falhou. Informe um valor válido!')
+
+def saques():
+      global operacoes_dia, data_hora_atual, saldo, data_saque, numero_saques
+
+      if (operacoes_dia >= 3 and data_deposito or data_saque == data_hora_atual):
+            print('Atingiu o limite diário de transações.')
+      elif (numero_saques >= 3):
+            print('Limite diário de saque atingido!')
+      else:
+            valor_saque = float(input('Qual valor deseja sacar?'))
+            if (valor_saque > saldo):
+                print('Saldo insuficiente!')
+                
+            elif (valor_saque > limite):
+                print('Você só pode sacar até R$ 500.00. Escolha um valor menor ou igual a R$ 500.00')
+                
+            else:
+                if valor_saque > 0:
+                    data_hora_atual = datetime.now()
+                    
+                    data_saque = data_hora_atual.strftime(hora_ptbr)
+                    saldo = saldo - valor_saque
+                    print('O valor sacado será: R${:.2f} às {}'.format(valor_saque, data_saque))
+                    numero_saques = numero_saques + 1    
+                    saque = valor_saque         
+                    dic_saque = {'R$': valor_saque, 'Horário': data_saque}
+                    operacoes_saque.append(dic_saque)
+                    operacoes_dia +=1           
+                else:
+                    print('Operação falhou. Informe um valor válido!')
+
+def extratos():
+     print('Extrato do Dia')
+     for item in operacoes:
+        print(f'Deposito de R$ {item['R$']} em {item['Horário']}')
+     for item in operacoes_saque:
+        print(f'Saque de R$ {item['R$']} em {item['Horário']}')
+        print(f'Saldo final: R$ {saldo}')
+
+def criacao_cliente():
+    nome_cliente = input('Digite nome do cliente: ')
+    data_nascimento = input('Digite a data de nascimento: ')
+    cpf = input('Digite o cpf (apenas números): ')
+    logradouro = input('Digite o logradouro: ')
+    nro = input('Digite o número da morada:')
+    bairro = input('Dgite o bairro: ')
+    cidade = input('Digite a cidade: ')
+    estado = input('Digite a sigla do estado: ')
+    dados_cliente = (f"""
+Dados do Usuário criado:
+Nome: {nome_cliente.capitalize()}, 
+Data de Nascimento (dd/mm/aaaa): {data_nascimento},
+CPF: {cpf},
+Morada: {logradouro.capitalize()}, {nro}, {bairro.capitalize()}, {cidade.capitalize()}/{estado.upper()}.""")
+    print('Criando Usuário...')
+    time.sleep(2)
+    
+    print(dados_cliente)
+  
+    dic_dados_cliente = {'Nome': nome_cliente, 'Nascimento': data_nascimento, 'CPF': cpf, 'Morada': logradouro.capitalize(), 'N.': nro, 'Bairro': bairro.capitalize(), 'Cidade': cidade.capitalize(), 'Estado': estado.upper()}
+    clientes.append(dic_dados_cliente)
+
+def criacao_conta():
+   global contas
+   usuario_conta = input('Digite o nome do usuário: ')
+   contas +=1
+   
+   print('Criando Conta para Usuário...')
+   time.sleep(2)
+
+   print(f'Usuário: {usuario_conta}, Agência: 0001, Conta: {contas}')
+   
+   dados_contas = {'Usuário': usuario_conta, 'Agência': '0001', 'Conta Número': contas}
+   lista_conta.append(dados_contas)
+
+
+while True:
+    opcao = input(menu)
+    
+    if opcao == '1':
+     deposito()
+    elif opcao == '2':
+     saques()
+    elif opcao == '3':
+     extratos()
+    elif opcao == '4':
+     criacao_cliente() 
+    elif opcao == '5':
+     criacao_conta()   
+    elif opcao == '6':
+     print(clientes)
+    elif opcao == '7':
+     print(lista_conta)
+    elif opcao == '0':
+      break
+    else:
+     print('Digite um comando válido!')    

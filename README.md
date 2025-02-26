@@ -1,4 +1,4 @@
-# Protein Database
+# Banking System
 Project built to demonstrate a simple banking system built in python language and has some simple banking system functionalities.
 
 ## 📌 Features:

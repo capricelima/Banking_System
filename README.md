@@ -24,10 +24,10 @@ This project was developed with the following technologies:
 🖥️ Python version 3.12.9
 
 ## Clone this repository
-git clone https://github.com/capricelima/Banking_System.git
+git clone https://github.com/capricelima/Banking_System_Python.git
 
 ## Enter the directory
-cd Banking_System
+cd Banking_System_Python
 
 ## 📝 License
 This project is unlicensed and is free to use.
